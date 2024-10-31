@@ -18,7 +18,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-st.set_page_config(layout='wide')
+st.set_page_config(layout='wide',page_icon="📅", page_title="Data Exploration")
 
 
 models = {
