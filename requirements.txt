@@ -1,6 +1,6 @@
 openai
 pandas
-sklearn
+scikit-learn
 seaborn
 matplotlib
 numpy
