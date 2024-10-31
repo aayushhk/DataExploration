@@ -1,0 +1,9 @@
+[theme]
+primaryColor="#3bffbe"
+backgroundColor="#202020"
+secondaryBackgroundColor="#000000"
+textColor="#ffffff"
+
+[client]
+toolbarMode = "minimal"
+showSidebarNavigation = false
