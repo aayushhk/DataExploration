@@ -49,8 +49,8 @@ if 'model_trained' not in st.session_state:
 # Streamlit app title and description
 
 
-st.title("Classification Model Comparison App")
-st.write("Upload a dataset to apply and compare different classification models.")
+st.title("Data visualization and Classification Model Comparison App")
+st.write("Upload a dataset to visualize, explore and apply and compare different classification models.")
 
 a=st.container(border=True)
 # Upload dataset
