@@ -17,8 +17,7 @@ from sklearn.ensemble import RandomForestRegressor
 import plotly.express as px
 import plotly.graph_objects as go
 
-
-st.set_page_config(layout='wide',page_icon="📅", page_title="Data Exploration")
+st.set_page_config(layout='wide',page_icon="🍇", page_title="Data Exploration")
 
 
 models = {
