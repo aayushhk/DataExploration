@@ -1,8 +1,9 @@
 [theme]
-primaryColor="#3bffbe"
-backgroundColor="#202020"
-secondaryBackgroundColor="#000000"
-textColor="#ffffff"
+base="light"
+primaryColor="#005da6"
+secondaryBackgroundColor="#f3f3f3"
+
+
 
 [client]
 toolbarMode = "minimal"
