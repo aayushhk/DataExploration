@@ -17,6 +17,7 @@ from sklearn.ensemble import RandomForestRegressor
 import plotly.express as px
 import plotly.graph_objects as go
 
+
 st.set_page_config(layout='wide',page_icon="🍇", page_title="Data Exploration")
 
 
@@ -87,7 +88,7 @@ def plot_advanced_visualizations(data):
         if graph_type == "Correlation Heatmap":
            # st.code("Correlation Heatmap")
             correlation_matrix = data[numeric_columns].corr()
-            fig, ax = plt.subplots(figsize=(20, 6))
+            fig, ax = plt.subplots(figsize=(20, 20))
             sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", ax=ax)
             st.pyplot(fig)
 
@@ -190,27 +191,65 @@ with a:
             st.subheader("Data Summary")
             st.write(data.describe())
             st.divider()
+            st.subheader("Preprocessing the data")
+            a,b=st.columns(2)
+            # Select columns to delete
+            with a:
+                st.write("Columns with NAN Values")
+                st.write(data.isnull().sum())
+                
+                
+            with b:
+                columns_to_delete = st.multiselect("Select columns to delete", data.columns)
+                if columns_to_delete:
+                    data = data.drop(columns_to_delete, axis=1)
+                    st.session_state['data'] = data
+                    st.success("Selected columns deleted.")
+                    st.toast("Selected columns deleted.")
+                
+        
+
+            st.divider()
             st.subheader("Data visualization")
             plot_advanced_visualizations(data)
+            # Feature and Target selection
+            
+
+            # Advanced visualizations
+
+
+            
             
 
 
         
 # Ensure data is loaded before proceeding
 if st.session_state['data_loaded']:
-    data = st.session_state['data']
+   
     
-    # Feature and Target selection
-    st.subheader("Train and Test classification models")
+    #preprocess the data before feeding it to the models
+    st.header("Train and Test classification models")
     st.caption("We will test the following models for classification:")
     i=1
     for model_name,model in models.items():
         
         st.caption(f"({i}) {model_name}")
         i=i+1
+    
+    st.subheader("Feature and Target Selection")
+    st.write("Please select your target variable and the features that you want to use for training.")
     target = st.selectbox('Select Target Variable', data.columns)
     features = st.multiselect('Select Features', data.drop(target, axis=1).columns)
+    st.session_state['target'] = target
+    st.session_state['features'] = features
+    st.session_state['features_selected'] = True
+
+    # Feature and Target selection
     
+    
+    
+    data = data.dropna(axis="index")
+    st.warning("Removed NAN values automatically")
     tande=st.button("Train and Evaluate Models")
     if features and target and tande:
         X = data[features]
@@ -218,8 +257,8 @@ if st.session_state['data_loaded']:
         st.session_state['X'] = X
         st.session_state['y'] = y
         st.session_state['features_selected'] = True
-        with st.container(border=True):
-            st.success("Features and target variable selected.")
+        st.success("Features and target variable selected.")
+        
            
 
 # Ensure features and target are set before proceeding
@@ -326,8 +365,8 @@ if st.session_state['model_trained']:
     
     best_model.fit(X, y)
     with st.container(border=True):
-        st.subheader(f"Predict using the best model ({best_model_name})",)
-        st.info(f"Best Model> {best_model_name} with Accuracy > {accuracy_scores[best_model_name]:.2f}")
+        st.subheader(f"Predict using the best model ({best_model_name})")
+        st.info(f"Best Model: {best_model_name} with Accuracy: {accuracy_scores[best_model_name]:.2f}")
     
         # Plot accuracy scores
         
@@ -349,7 +388,7 @@ if st.session_state['model_trained']:
         with st.form("Predictions with the Best Model"):  
             input_data = []
             for feature in features:  
-                input_val = st.number_input(f"Enter value for {feature}", key=feature,)  
+                input_val = st.number_input(f"Enter value for {feature}", key=feature,value=data[feature].mean())  
                 input_data.append(input_val)  
             submit_button = st.form_submit_button("Predict",type="primary") 
 
@@ -358,9 +397,8 @@ if st.session_state['model_trained']:
                     if prediction:
                     
                 
-                        st.code(f"Predicted {target} : {prediction} ")
-                        st.write(f"MODEL USED FOR PREDICTION >  {best_model_name}")
-                        st.write(f"ACCURACY SCORE > {accuracy_scores[best_model_name]}")
+                        st.code(f"Predicted {target} : {prediction} \nMODEL USED FOR PREDICTION:  {best_model_name} \nACCURACY SCORE: {accuracy_scores[best_model_name]}")
+                       
                     
                     else:
                         st.error("Error in prediction")
